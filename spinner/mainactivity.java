@@ -1,47 +1,73 @@
 package com.example.spinner;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.TextView;
 
-public class MainActivity extends Activity {
+import androidx.appcompat.app.AppCompatActivity;
 
-    Spinner spinner;
+public class MainActivity extends AppCompatActivity {
 
-    String[] items = {"Select", "Apple", "Banana", "Mango"};
+    Spinner spinnerSubject;
+    TextView txtResult;
 
-    public void onCreate(Bundle b) {
-        super.onCreate(b);
+    String[] subjects = {
+            "Select Subject",
+            "Java",
+            "Python",
+            "Android",
+            "Database",
+            "Networking"
+    };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        spinner = findViewById(R.id.spinner);
+        spinnerSubject = findViewById(R.id.spinnerSubject);
+        txtResult = findViewById(R.id.txtResult);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_item,
-                items
+                subjects
         );
 
-        spinner.setAdapter(adapter);
+        adapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item
+        );
 
-        spinner.setOnItemSelectedListener(
-            new AdapterView.OnItemSelectedListener() {
+        spinnerSubject.setAdapter(adapter);
 
-                public void onItemSelected(
-                        AdapterView<?> parent, View view,
-                        int position, long id) {
+        // Spinner Event Handling
+        spinnerSubject.setOnItemSelectedListener(
+                new AdapterView.OnItemSelectedListener() {
 
-                    Toast.makeText(
-                        MainActivity.this,
-                        items[position],
-                        Toast.LENGTH_SHORT
-                    ).show();
+                    @Override
+                    public void onItemSelected(
+                            AdapterView<?> parent,
+                            View view,
+                            int position,
+                            long id) {
+
+                        String selectedSubject = subjects[position];
+
+                        if (position != 0) {
+                            txtResult.setText(
+                                    "You selected: " + selectedSubject
+                            );
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(
+                            AdapterView<?> parent) {
+                    }
                 }
-
-                public void onNothingSelected(AdapterView<?> parent) {
-                }
-            }
         );
     }
 }
